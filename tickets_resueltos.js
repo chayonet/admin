@@ -1,6 +1,5 @@
 /* =================================================================================
    ARCHIVO: tickets_resueltos.js
-   MÓDULO DE SOPORTE - DIGITAL WORLD
    Lógica: Listado de tickets cerrados, lectura de contexto y resolución.
 ================================================================================= */
 
