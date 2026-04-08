@@ -5,7 +5,7 @@
    (ACTUALIZADO: ASIGNACIÓN MANUAL / REGALOS - CARGA ASÍNCRONA)
 ================================================================================= */
 
-const API_ADMIN_USERS = '${API_BASE_URL_F}/admin_api.php';
+const API_ADMIN_USERS = `${API_BASE_URL_F}/admin_api.php`;
 
 // Variables Globales del Motor
 let usuariosDataOriginal = []; 
