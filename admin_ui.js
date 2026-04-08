@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btnSubmit.disabled = true;
 
             try {
-                const response = await fetch('https://apis-yley.onrender.com/admin_api.php', {
+                const response = await fetch(`${API_BASE_URL_F}/admin_api.php`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ accion: 'loginAdmin', usuario: user, clave: pass })
