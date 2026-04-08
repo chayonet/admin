@@ -5,7 +5,7 @@
    (ACTUALIZADO: ASIGNACIÓN MANUAL / REGALOS - CARGA ASÍNCRONA)
 ================================================================================= */
 
-const API_ADMIN_USERS = 'https://api-ventas-zzd6.onrender.com/admin_api.php';
+const API_ADMIN_USERS = 'https://apis-yley.onrender.com/admin_api.php';
 
 // Variables Globales del Motor
 let usuariosDataOriginal = []; 
