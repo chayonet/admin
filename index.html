@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración</title>
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+    <div id="login-section" style="display: none;">
+        <h2>Acceso Admin</h2>
+        <div id="form-login-admin">
+            <form id="login-form">
+                <label for="admin-user">Usuario</label>
+                <input type="text" id="admin-user" placeholder="Ingresa tu usuario" required>
+                
+                <label for="admin-pass">Contraseña</label>
+                <input type="password" id="admin-pass" placeholder="Ingresa tu contraseña" required>
+                
+                <button type="submit">Ingresar al Panel</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="dashboard-section">
+        
+        <nav id="sidebar" class="active">
+            <div class="logo" style="display: flex; flex-direction: column; justify-content: center;">
+                <h2 style="font-family: 'Righteous', cursive; text-transform: uppercase; margin: 0;">Mi Tienda</h2>
+                <span style="color: var(--text-muted); font-size: 0.7rem; font-weight: 800; letter-spacing: 1.5px; margin-top: 4px; text-align: center;">v.1.2.1</span>
+            </div>
+
+            <button class="nav-btn" id="btn-toggle-desktop">
+                <i class="material-icons-round">menu_open</i> 
+                <span class="menu-text">Ocultar Menú</span>
+            </button>
+
+            <ul id="menu-list">
+                <li>
+                    <button class="nav-btn active" data-target="mod-inicio" data-title="Inicio">
+                        <i class="material-icons-round">home</i> 
+                        <span class="menu-text">Inicio</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button class="nav-btn" data-toggle="sub-productos">
+                        <i class="material-icons-round">inventory_2</i> 
+                        <span class="menu-text">Productos</span>
+                    </button>
+                    <ul class="submenu" id="sub-productos">
+                        <li><button class="nav-btn" data-target="mod-productos-todos" data-title="Todos los productos">Todos los productos</button></li>
+                        <li><button class="nav-btn" data-target="mod-productos-servicios" data-title="Categorias">Categorias</button></li>
+                    </ul>
+                </li>
+                
+                <li>
+                    <button class="nav-btn" data-target="mod-usuarios-editar" data-title="Usuarios">
+                        <i class="material-icons-round">group</i> 
+                        <span class="menu-text">Usuarios</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button class="nav-btn" data-toggle="sub-analisis">
+                        <i class="material-icons-round">analytics</i> 
+                        <span class="menu-text">Análisis</span>
+                    </button>
+                    <ul class="submenu" id="sub-analisis">
+                        <li><button class="nav-btn" data-target="mod-analisis-volumen" data-title="Volumen de ventas">Volumen de ventas</button></li>
+                        <li><button class="nav-btn" data-target="mod-analisis-ganancias" data-title="Movimientos">Movimientos</button></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <button class="nav-btn" data-target="mod-ranking" data-title="Ranking de Clientes">
+                        <i class="material-icons-round">leaderboard</i> 
+                        <span class="menu-text">Ranking</span>
+                    </button>
+                </li>
+
+                <li>
+                    <button class="nav-btn" data-toggle="sub-tickets" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <div style="display: flex; align-items: center;">
+                            <i class="material-icons-round">confirmation_number</i> 
+                            <span class="menu-text" style="margin-left: 8px;">Tickets</span>
+                        </div>
+                        <span id="global-badge-tickets" style="display: none;"></span>
+                    </button>
+                    <ul class="submenu" id="sub-tickets">
+                        <li>
+                            <button class="nav-btn" data-target="mod-tickets-pendientes" data-title="Tickets pendientes" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                <span>Tickets pendientes</span>
+                                <span id="submenu-badge-tickets" style="display: none;"></span>
+                            </button>
+                        </li>
+                        <li><button class="nav-btn" data-target="mod-tickets-resueltos" data-title="Tickets resueltos">Tickets resueltos</button></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="theme-switch-wrapper">
+                <span class="theme-text menu-text" style="color: var(--text-gray); font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 8px;">
+                    <i class="material-icons-round" style="font-size: 1.2rem;">dark_mode</i> Modo Oscuro
+                </span>
+                <label class="theme-switch">
+                    <input type="checkbox" id="checkbox-theme-toggle">
+                    <span class="theme-slider"></span>
+                </label>
+            </div>
+            
+        </nav>
+
+        <header>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button id="btn-toggle-menu" style="background: transparent; border: none; color: var(--text-main); cursor: pointer; padding: 5px;">
+                    <i class="material-icons-round" style="font-size: 2rem;">menu</i>
+                </button>
+
+                <h1 id="page-title" style="margin: 0;">Inicio</h1>
+                <span id="digital-clock" style="font-weight: 600; color: var(--text-gray); font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap;">
+                    12:00:00 AM
+                </span>
+            </div>
+            
+            <p style="margin: 0; display: flex; align-items: center; gap: 10px;">
+                <span class="header-saludo">Hola, <span id="admin-name-display">Admin</span></span>
+                <button id="btn-logout">SALIR</button>
+            </p>
+        </header>
+
+        <main id="main-content">
+            <section id="mod-inicio" class="modulo"></section>
+
+            <section id="mod-productos-todos" class="modulo" style="display: none;"></section>
+            <section id="mod-productos-servicios" class="modulo" style="display: none;"></section>
+
+            <section id="mod-analisis-volumen" class="modulo" style="display: none;"></section>
+            <section id="mod-analisis-ganancias" class="modulo" style="display: none;"></section>
+
+            <section id="mod-usuarios-crear" class="modulo" style="display: none;"></section>
+            <section id="mod-usuarios-editar" class="modulo" style="display: none;"></section>
+            <section id="mod-usuarios-recargas" class="modulo" style="display: none;"></section>
+
+            <section id="mod-ranking" class="modulo" style="display: none;"></section>
+
+            <section id="mod-tickets-pendientes" class="modulo" style="display: none;"></section>
+            <section id="mod-tickets-resueltos" class="modulo" style="display: none;"></section>
+        </main>
+
+    </div>
+
+    <div id="toast-container"></div>
+
+    <div class="modal-overlay" id="modal-general" style="display: none;">
+        <div class="modal-content ticket-box" id="modal-general-content"></div>
+    </div>
+
+    <script src="admin_ui.js"></script>
+    <script src="adaptacion_cel.js"></script>
+    <script src="todos_los_productos.js"></script>
+    <script src="categorias.js"></script>
+    <script src="papelera.js"></script>
+    <script src="crear_usuarios.js"></script>
+    <script src="editar_usuarios.js"></script>
+    <script src="recargas.js"></script>
+    <script src="movimientos.js"></script>
+    <script src="movimientos_modal.js"></script>
+    <script src="movimientos2.js"></script>
+    <script src="inicio.js"></script>
+    <script src="volumen_de_ventas.js"></script>
+    <script src="rankings.js"></script> 
+    <script src="tickets_pendientes.js"></script>
+    <script src="tickets_resueltos.js"></script>
+    
+</body>
+</html>

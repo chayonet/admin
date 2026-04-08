@@ -1,0 +1,754 @@
+/* =========================================================
+   ESTILOS ADMIN - PREMIUM DASHBOARD (LIGHT & DARK THEMES)
+   ACTUALIZADO: TEMA ROYAL PURPLE & INDIGO (PREMIUM)
+   ========================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Righteous&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* =========================================================
+   1. VARIABLES GLOBALES (Minimalista Premium)
+   ========================================================= */
+:root {
+    /* Paleta Modo Claro */
+    --bg-dark: #f8fafc;         
+    --bg-card: #ffffff;         
+    --bg-sidebar: #ffffff;      
+    --border-color: #e2e8f0;    
+    --border-light: #f1f5f9;
+    
+    /* 🔥 NUEVOS TONOS ROYAL PURPLE (Premium) 🔥 */
+    --accent: #7c3aed;          
+    --accent-hover: #6d28d9;    
+    --accent-light: rgba(124, 58, 237, 0.05);    
+    --accent-glow: rgba(124, 58, 237, 0.25); 
+    --accent-gradient: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+    
+    --text-main: #0f172a;       
+    --text-gray: #64748b;       
+    --text-muted: #94a3b8;
+    
+    --success: #10b981;
+    --success-bg: #ecfdf5;
+    --danger: #ef4444;
+    --danger-bg: #fef2f2;
+    --warning: #f59e0b;
+    --warning-bg: #fffbeb;
+    
+    /* Dimensiones */
+    --sidebar-w: 260px;
+    --sidebar-collapsed-w: 80px; 
+    --header-h: 75px; 
+    
+    /* Sombras Premium */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+    --shadow-float: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+}
+
+/* 1.1 VARIABLES MODO OSCURO */
+body.dark-mode {
+    --bg-dark: #0f172a;         
+    --bg-card: #1e293b;         
+    --bg-sidebar: #1e293b;
+    --border-color: #334155;
+    --border-light: #1e293b;
+    
+    /* 🔥 NUEVOS TONOS ROYAL PURPLE MODO OSCURO 🔥 */
+    --accent: #8b5cf6;          
+    --accent-hover: #a78bfa;    
+    --accent-light: rgba(139, 92, 246, 0.1); 
+    --accent-glow: rgba(139, 92, 246, 0.3);
+    --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+    
+    --text-main: #f8fafc;       
+    --text-gray: #94a3b8;       
+    --text-muted: #64748b;
+    
+    --success: #10b981;
+    --success-bg: rgba(16, 185, 129, 0.1);
+    --danger: #ef4444;
+    --danger-bg: rgba(239, 68, 68, 0.1);
+    --warning: #f59e0b;
+    --warning-bg: rgba(245, 158, 11, 0.1);
+    
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    --shadow-float: 0 25px 50px -12px var(--accent-glow);
+}
+
+/* =========================================================
+   2. RESET Y ESTILOS BASE
+   ========================================================= */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+body { 
+    background-color: var(--bg-dark); 
+    color: var(--text-main); 
+    overflow-x: hidden; 
+    transition: background-color 0.3s ease, color 0.3s ease; 
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-gray); }
+body.dark-mode ::-webkit-scrollbar-thumb { background: #475569; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+/* =========================================================
+   3. PANTALLA DE LOGIN
+   ========================================================= */
+#login-section { 
+    display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh;
+    background: radial-gradient(circle at center, var(--bg-card) 0%, var(--bg-dark) 100%);
+}
+#login-section h2 {
+    font-family: 'Righteous', cursive; font-size: 2.2rem; margin-bottom: 30px; text-transform: uppercase;
+    color: var(--text-main); letter-spacing: 2px;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#form-login-admin {
+    background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 40px;
+    width: 100%; max-width: 400px; box-shadow: var(--shadow-float); text-align: center;
+    transition: all 0.3s ease;
+}
+
+/* =========================================================
+   4. FORMULARIOS: INPUTS Y BOTONES GLOBALES
+   ========================================================= */
+label { 
+    display: block; text-align: left; color: var(--text-gray); font-weight: 600; 
+    font-size: 0.8rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; 
+}
+
+input, select, textarea {
+    width: 100%; background: var(--bg-dark); border: 1px solid var(--border-color); color: var(--text-main);
+    padding: 14px 18px; border-radius: 10px; font-size: 0.95rem; font-weight: 500; outline: none; 
+    transition: all 0.2s ease; margin-bottom: 20px;
+}
+input::placeholder, textarea::placeholder { color: var(--text-muted); }
+input:focus, select:focus, textarea:focus { 
+    background: var(--bg-card); border-color: var(--accent); 
+    box-shadow: 0 0 0 3px var(--accent-light); 
+}
+
+/* Botones con el nuevo Gradiente */
+button {
+    background: var(--accent-gradient); color: #ffffff; border: none; padding: 12px 24px; border-radius: 10px; 
+    font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; 
+    cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px var(--accent-glow);
+    display: inline-flex; justify-content: center; align-items: center; gap: 8px;
+}
+button:hover { 
+    filter: brightness(1.1); transform: translateY(-2px); 
+    box-shadow: 0 6px 16px var(--accent-glow); 
+}
+button:active { transform: translateY(0); filter: brightness(0.9); }
+
+/* =========================================================
+   5. LAYOUT: SIDEBAR, NAVEGACIÓN Y SUBMENÚS
+   ========================================================= */
+#dashboard-section { display: flex; flex-direction: column; width: 100%; min-height: 100vh; }
+
+nav {
+    width: var(--sidebar-w); background: var(--bg-sidebar); height: 100vh; position: fixed; top: 0; left: 0;
+    border-right: 1px solid var(--border-color); z-index: 100; transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column;
+}
+
+/* EFECTO NEÓN EN SIDEBAR PARA MODO OSCURO */
+body.dark-mode nav {
+    border-right: 1px solid transparent;
+    border-image: linear-gradient(to bottom, #8b5cf6, #3b82f6) 1;
+}
+
+nav .logo { padding: 25px 20px; text-align: center; border-bottom: 1px solid var(--border-light); }
+
+/* Efecto Gradiente en el Logo del Menú */
+nav .logo h2 { 
+    font-family: 'Righteous', cursive; text-transform: uppercase; letter-spacing: 1px; font-size: 1.5rem;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+} 
+
+/* Distancia entre bloques del menú */
+nav > ul { list-style: none; padding: 15px 0; }
+nav > ul > li { margin-bottom: 4px; }
+
+/* Botones Principales del Menú */
+.nav-btn {
+    width: 100%; background: transparent; color: var(--text-gray); font-weight: 500; box-shadow: none; border-radius: 0;
+    text-align: left; padding: 12px 20px; font-size: 0.85rem; border-left: 3px solid transparent; 
+    transition: all 0.2s ease; display: flex; align-items: center; justify-content: flex-start; 
+    gap: 12px; white-space: nowrap;
+}
+.nav-btn i { font-size: 1.2rem; transition: all 0.2s ease; }
+.menu-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.nav-btn:hover { color: var(--text-main); background: var(--bg-dark); transform: none; box-shadow: none; filter: none; }
+.nav-btn.active {
+    color: var(--accent); font-weight: 700; border-left: 3px solid var(--accent);
+    background: var(--accent-light);
+}
+
+/* Efecto Gradiente en el icono activo */
+.nav-btn.active i { 
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Submenús (Árbol Premium Alineado y Anti-Ghost Clicks) */
+.submenu { 
+    max-height: 0; 
+    overflow: hidden; 
+    visibility: hidden; 
+    opacity: 0;         
+    transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0.3s, margin 0.3s ease; 
+    background: transparent; 
+    border-left: 2px solid var(--border-color); 
+    margin: 0 10px 0 8px; /* Pegado a la izquierda */
+    padding: 0 !important; 
+}
+body.dark-mode .submenu { border-color: var(--border-light); }
+
+.submenu.open { 
+    max-height: 500px; 
+    visibility: visible; 
+    opacity: 1; 
+    margin-top: 8px; 
+    margin-bottom: 12px; 
+}
+
+.submenu .nav-btn { 
+    padding: 10px 15px; font-size: 0.8rem; border-left: none; color: var(--text-gray); 
+    border-radius: 6px; margin: 2px 0; width: 100%;
+}
+.submenu .nav-btn:hover { background: var(--bg-dark); color: var(--accent); transform: translateX(4px); box-shadow: none; filter: none; }
+.submenu .nav-btn.active { background: transparent; color: var(--accent); font-weight: 700; }
+
+/* Menú Contraído (Hamburguesa) */
+nav.collapsed { width: var(--sidebar-collapsed-w); }
+nav.collapsed .menu-text { display: none; }
+nav.collapsed .logo h2 { display: none; }
+nav.collapsed .logo { padding: 25px 0; }
+nav.collapsed .logo::after { 
+    content: 'MT'; font-family: 'Righteous', cursive; font-size: 1.3rem; 
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+nav.collapsed .submenu { display: none !important; } 
+nav.collapsed .nav-btn { padding: 18px; justify-content: center; }
+nav.collapsed .nav-btn i { margin: 0; }
+
+/* =========================================================
+   6. HEADER Y RELOJ DIGITAL
+   ========================================================= */
+header {
+    margin-left: var(--sidebar-w); width: calc(100% - var(--sidebar-w)); height: var(--header-h);
+    padding: 0 40px; display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); 
+    position: sticky; top: 0; z-index: 50; transition: margin-left 0.3s ease, width 0.3s ease, background 0.3s;
+}
+body.dark-mode header { background: rgba(30, 41, 59, 0.8); border-bottom: 1px solid var(--border-color); }
+
+nav.collapsed ~ header { margin-left: var(--sidebar-collapsed-w); width: calc(100% - var(--sidebar-collapsed-w)); }
+
+header h1 { font-family: 'Righteous', cursive; font-size: 1.3rem; color: var(--text-main); margin: 0; letter-spacing: 0.5px; }
+
+/* Estilo del Reloj Digital */
+#digital-clock {
+    font-weight: 600; 
+    color: var(--text-gray); 
+    font-size: 0.9rem; 
+    letter-spacing: 1px; 
+    text-transform: uppercase;
+}
+
+/* Contenedor derecho del header (Usuario y Botón Salir) */
+header p { 
+    display: flex; align-items: center; justify-content: flex-end; margin: 0; 
+    color: var(--text-gray); font-size: 0.85rem; font-weight: 500; gap: 20px; 
+}
+#admin-name-display { color: var(--text-main); font-weight: 700; margin-left: 4px; }
+
+/* Botón Salir rígidamente a la derecha */
+#btn-logout { 
+    background: transparent; color: var(--text-gray); box-shadow: none; font-size: 0.75rem; 
+    padding: 8px 16px; border: 1px solid var(--border-color); border-radius: 8px;
+    margin: 0; filter: none;
+}
+#btn-logout:hover { 
+    background: var(--danger-bg); color: var(--danger); border-color: rgba(239, 68, 68, 0.3); 
+    transform: none; filter: none; box-shadow: none;
+}
+
+/* =========================================================
+   7. MAIN Y MÓDULOS (CONTENEDORES)
+   ========================================================= */
+main {
+    margin-left: var(--sidebar-w); width: calc(100% - var(--sidebar-w)); padding: 40px; 
+    transition: margin-left 0.3s ease, width 0.3s ease; min-height: calc(100vh - var(--header-h));
+}
+nav.collapsed ~ main { margin-left: var(--sidebar-collapsed-w); width: calc(100% - var(--sidebar-collapsed-w)); }
+
+.modulo { animation: fadeIn 0.4s ease-out; }
+.modulo > h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 25px; color: var(--text-main); letter-spacing: -0.5px; }
+
+/* TÍTULOS CON GRADIENTE EN MODO OSCURO */
+body.dark-mode .modulo > h2 {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+/* =========================================================
+   7.1 TABLAS PREMIUM (MEJORADAS PARA EVITAR SELECCIÓN Y VERSE MÁS FINAS)
+   ========================================================= */
+table {
+    width: 100%; border-collapse: separate; border-spacing: 0; background: var(--bg-card); 
+    border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); 
+    border: 1px solid var(--border-color); margin-top: 10px; transition: all 0.3s ease;
+}
+thead th {
+    background: var(--bg-dark); 
+    color: var(--text-gray); 
+    font-weight: 600; 
+    font-size: 0.75rem; 
+    text-transform: uppercase; 
+    letter-spacing: 1px; 
+    padding: 16px 20px; /* Un poco más de respiro arriba y abajo */
+    text-align: left; 
+    border-bottom: 1px solid var(--border-color);
+    
+    /* MAGIA: Evita que el texto se seleccione (sombreé en azul) al hacer clics rápidos para ordenar */
+    user-select: none; 
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+/* Efecto hover suave solo en los cabezales que sean ordenables (los que tienen cursor pointer por JS) */
+thead th[style*="cursor: pointer"]:hover {
+    background: var(--border-light);
+    color: var(--text-main);
+}
+
+tbody tr { transition: background 0.2s ease, transform 0.2s ease; }
+tbody tr:not(:last-child) td { border-bottom: 1px solid var(--border-light); }
+tbody tr:hover { background: var(--accent-light); }
+tbody td { padding: 14px 20px; font-size: 0.85rem; color: var(--text-main); vertical-align: middle; }
+
+/* Formularios Flotantes */
+#form-crear-usuario-container, #form-asignacion-manual {
+    background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 35px;
+    box-shadow: var(--shadow-md); max-width: 550px; transition: all 0.3s ease;
+}
+#form-crear-usuario-container h3, #form-asignacion-manual h3 { 
+    color: var(--text-main); font-weight: 800; margin-bottom: 25px; font-size: 1.1rem;
+}
+
+/* Dashboard Cards (Análisis) */
+#mod-analisis { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+#mod-analisis > div > div {
+    background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 25px; 
+    box-shadow: var(--shadow-sm); transition: all 0.3s ease; position: relative; overflow: hidden;
+    display: flex; flex-direction: column; height: 100%;
+}
+#mod-analisis > div > div:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: rgba(124, 58, 237, 0.3); }
+
+/* Efecto Hover Neón en Cartas de Análisis (Modo Oscuro) */
+body.dark-mode #mod-analisis > div > div:hover {
+    border-color: #8b5cf6;
+    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15), 0 0 15px rgba(59, 130, 246, 0.1);
+    transform: translateY(-4px);
+}
+
+#mod-analisis > div > div::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--accent-gradient);
+    opacity: 0; transition: opacity 0.3s;
+}
+#mod-analisis > div > div:hover::before { opacity: 1; }
+
+#mod-analisis h3 { font-size: 0.8rem; color: var(--text-gray); font-weight: 700; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
+#mod-analisis ul { list-style: none; flex-grow: 1; }
+#mod-analisis li { 
+    padding: 12px 0; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; 
+    align-items: center; font-size: 0.9rem; color: var(--text-main); font-weight: 500; 
+}
+#mod-analisis li:last-child { border-bottom: none; }
+#mod-analisis li span i { color: var(--text-muted); margin-right: 10px; vertical-align: middle; font-size: 1rem; }
+
+/* =========================================================
+   8. ETIQUETAS (BADGES)
+   ========================================================= */
+.stat-badge { 
+    background: var(--bg-dark); border: 1px solid var(--border-color); color: var(--text-main); 
+    padding: 4px 10px; border-radius: 6px; font-weight: 700; font-size: 0.75rem; 
+}
+.stat-badge.success { background: var(--success-bg); border-color: rgba(16, 185, 129, 0.2); color: var(--success); }
+.stat-badge.danger { background: var(--danger-bg); border-color: rgba(239, 68, 68, 0.2); color: var(--danger); }
+.stat-badge.warning { background: var(--warning-bg); border-color: rgba(245, 158, 11, 0.2); color: var(--warning); }
+
+/* =========================================================
+   9. COMPONENTES GLOBALES (TOASTS Y MODALES)
+   ========================================================= */
+#toast-container { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 15px; z-index: 999999; }
+.toast {
+    background: var(--bg-card); border-left: 3px solid var(--accent); color: var(--text-main); padding: 14px 20px; 
+    border-radius: 8px; font-size: 0.85rem; font-weight: 600; box-shadow: var(--shadow-lg); 
+    display: flex; align-items: center; gap: 12px; min-width: 280px;
+    animation: toastSlideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; border: 1px solid var(--border-color); border-left-width: 3px;
+}
+.toast.success { border-left-color: var(--success); }
+.toast.success i { color: var(--success); }
+.toast.error { border-left-color: var(--danger); }
+.toast.error i { color: var(--danger); }
+.toast.hiding { animation: toastFadeOut 0.3s ease forwards; }
+
+@keyframes toastSlideIn { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes toastFadeOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(120%); opacity: 0; } }
+
+.modal-overlay { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.5); 
+    backdrop-filter: blur(4px); z-index: 9999; display: flex; align-items: center; justify-content: center; 
+    animation: fadeIn 0.2s ease;
+}
+.modal-content { 
+    background: var(--bg-card); width: 90%; max-width: 450px; border-radius: 16px; 
+    border: 1px solid var(--border-color); box-shadow: var(--shadow-float); overflow: hidden; 
+}
+
+/* Efecto Neón en el Modal en Modo Oscuro */
+body.dark-mode .modal-content {
+    border: 1px solid rgba(139, 92, 246, 0.5);
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.15), 0 0 20px rgba(139, 92, 246, 0.1);
+}
+
+.ticket-box-header { 
+    background: var(--bg-dark); padding: 18px 25px; display: flex; justify-content: space-between; 
+    align-items: center; border-bottom: 1px solid var(--border-color); 
+}
+.ticket-box-header h3 { font-size: 1rem; color: var(--text-main); margin: 0; font-weight: 700; }
+.ticket-box-body { padding: 25px; color: var(--text-gray); font-size: 0.9rem; line-height: 1.5; }
+.btn-close-modal { background: transparent; color: var(--text-muted); box-shadow: none; padding: 0; font-size: 1.2rem; filter: none;}
+.btn-close-modal:hover { color: var(--danger); transform: rotate(90deg); background: transparent; box-shadow: none; filter: none;}
+
+/* =========================================================
+   10. RESPONSIVE DESIGN Y MENÚ HAMBURGUESA
+   ========================================================= */
+@media(max-width: 1024px) {
+    #mod-analisis { grid-template-columns: 1fr; }
+}
+
+@media(max-width: 768px) {
+    /* Header ajustado para que no se apile */
+    header { 
+        margin-left: 0 !important; width: 100% !important; padding: 0 20px; 
+        height: auto; min-height: var(--header-h);
+        flex-direction: row; justify-content: space-between; 
+    }
+    
+    /* En móvil ocultamos el nombre y dejamos solo el botón SALIR */
+    header p { font-size: 0; }
+    #admin-name-display { display: none; }
+    #btn-logout { font-size: 0.75rem; padding: 6px 12px; }
+    
+    /* Ocultamos el reloj en pantallas muy chicas si estorba */
+    #digital-clock { display: none; }
+    
+    main { margin-left: 0 !important; width: 100% !important; padding: 20px; }
+    #form-asignacion-manual, #form-crear-usuario-container { width: 100% !important; padding: 20px; }
+    .toast { right: 20px; left: 20px; min-width: auto; bottom: 20px; }
+}
+
+/* Ocultar el botón hamburguesa en Computadoras */
+@media (min-width: 769px) {
+    #btn-toggle-menu {
+        display: none !important;
+    }
+}
+
+/* Configuración para Celulares - Fondo de cristal y animación */
+@media (max-width: 768px) {
+    #btn-toggle-menu {
+        display: block !important;
+        z-index: 10000;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    
+    /* Efecto de hundimiento al presionar el botón */
+    #btn-toggle-menu:active {
+        transform: scale(0.85); 
+        opacity: 0.7;
+    }
+
+    .header-saludo {
+        display: none; /* Oculta el "Hola, Admin" en móvil para ahorrar espacio */
+    }
+
+    /* Fondo oscuro y desenfocado detrás del menú (Efecto Cristal) */
+    body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.4); 
+        backdrop-filter: blur(3px); 
+        -webkit-backdrop-filter: blur(3px); 
+        z-index: 9998;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.4s;
+    }
+
+    /* Añade esto para que el fondo oscuro cierre el menú al tocarlo */
+    body:has(#sidebar.mobile-open)::after {
+        opacity: 1;
+        visibility: visible;
+        cursor: pointer;
+    }
+
+    /* El menú lateral con Aceleración por Hardware */
+    #sidebar {
+        position: fixed !important;
+        top: 0;
+        left: 0 !important; 
+        transform: translateX(-100%); 
+        width: 270px !important;
+        height: 100vh;
+        z-index: 9999;
+        background: var(--bg-dark); 
+        transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease !important;
+        box-shadow: none;
+    }
+
+    /* Al activarse la clase mediante JS */
+    #sidebar.mobile-open {
+        transform: translateX(0); 
+        box-shadow: 5px 0 35px rgba(0,0,0,0.7); 
+    }
+}
+
+/* =================================================================================
+   VISTA MÓVIL PREMIUM PARA TABLAS (DISEÑO TIPO CARDS)
+================================================================================= */
+@media (max-width: 768px) {
+    /* Quitar el comportamiento de tabla tradicional */
+    #tabla-productos,
+    #tabla-categorias,
+    #tabla-productos thead, 
+    #tabla-categorias thead, 
+    #tabla-productos tbody, 
+    #tabla-categorias tbody, 
+    #tabla-productos th, 
+    #tabla-categorias th, 
+    #tabla-productos td, 
+    #tabla-categorias td, 
+    #tabla-productos tr,
+    #tabla-categorias tr {
+        display: block;
+    }
+
+    /* Ocultar el encabezado de la tabla (pero mantenerlo para accesibilidad) */
+    #tabla-productos thead tr,
+    #tabla-categorias thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    /* Estilo de Tarjeta para cada Fila */
+    #tabla-productos tr,
+    #tabla-categorias tr {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        margin-bottom: 15px;
+        padding: 15px;
+        position: relative;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Efecto Neón en la tarjeta móvil en modo oscuro */
+    body.dark-mode #tabla-productos tr:hover,
+    body.dark-mode #tabla-categorias tr:hover {
+        border-color: #8b5cf6;
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15);
+    }
+
+    /* Acomodar las celdas dentro de la tarjeta */
+    #tabla-productos td,
+    #tabla-categorias td {
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        position: relative;
+        padding: 10px 0;
+        padding-left: 45%; /* Espacio para la etiqueta falsa */
+        text-align: right; /* Alinear el valor a la derecha */
+        min-height: 40px;
+    }
+
+    /* Quitar la línea inferior al último elemento de la tarjeta */
+    #tabla-productos td:last-child,
+    #tabla-categorias td:last-child {
+        border-bottom: 0;
+        padding-bottom: 0;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    /* Reemplaza tus múltiples nth-of-type por esto: */
+    #tabla-productos td::before, 
+    #tabla-categorias td::before {
+        content: attr(data-label); /* Toma el nombre directamente del HTML */
+        position: absolute;
+        left: 15px;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+
+    /* Nombres de las columnas para PRODUCTOS */
+    #tabla-productos td:nth-of-type(1)::before { content: "Seleccionar"; }
+    #tabla-productos td:nth-of-type(2)::before { content: "ID"; }
+    #tabla-productos td:nth-of-type(3)::before { content: "Servicio"; }
+    #tabla-productos td:nth-of-type(4)::before { content: "Credencial"; }
+    #tabla-productos td:nth-of-type(5)::before { content: "Fecha"; }
+    #tabla-productos td:nth-of-type(6)::before { content: "Duración"; }
+    #tabla-productos td:nth-of-type(7)::before { content: "Estado"; }
+    #tabla-productos td:nth-of-type(8)::before { content: "Comprador"; }
+    #tabla-productos td:nth-of-type(9)::before { content: "Acciones"; }
+
+    /* Nombres de las columnas para CATEGORÍAS */
+    #tabla-categorias td:nth-of-type(1)::before { content: "Seleccionar"; }
+    #tabla-categorias td:nth-of-type(2)::before { content: "Favorito"; }
+    #tabla-categorias td:nth-of-type(3)::before { content: "ID"; }
+    #tabla-categorias td:nth-of-type(4)::before { content: "Categoría"; }
+    #tabla-categorias td:nth-of-type(5)::before { content: "Tipo"; }
+    #tabla-categorias td:nth-of-type(6)::before { content: "Precio"; }
+    #tabla-categorias td:nth-of-type(7)::before { content: "Variación"; }
+    #tabla-categorias td:nth-of-type(8)::before { content: "Precios Esp."; }
+    #tabla-categorias td:nth-of-type(9)::before { content: "Límites"; }
+    #tabla-categorias td:nth-of-type(10)::before { content: "Acciones"; }
+
+    /* Ajustes específicos de diseño interior para móviles */
+    
+    /* Centrar checkbox */
+    #tabla-productos td:nth-of-type(1),
+    #tabla-categorias td:nth-of-type(1) {
+        text-align: right;
+    }
+    
+    /* Arreglar el bloque oscuro de las credenciales */
+    #tabla-productos td:nth-of-type(4) > div {
+        display: inline-block;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    /* Arreglar flexbox de imagen y nombre en categorías */
+    #tabla-categorias td:nth-of-type(4) > div {
+        justify-content: flex-end;
+        text-align: right;
+    }
+
+    /* Evitar que el contenedor general haga scroll raro */
+    div[style*="overflow-x: auto;"] {
+        overflow-x: hidden !important;
+    }
+    
+    /* Ajustar paginación */
+    #paginacion-productos-container,
+    #paginacion-categorias-container {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+}
+
+/* ==========================================
+   ESTILOS DEL INTERRUPTOR DE TEMA (Actualizado con Gradiente)
+   ========================================== */
+.theme-switch-wrapper {
+    margin-top: auto; /* Lo empuja hacia abajo */
+    padding: 20px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: padding 0.3s;
+}
+
+.theme-switch {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.theme-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cbd5e1;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.theme-slider::before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* 🔥 Tema Oscuro Activado con Gradiente Royal Purple 🔥 */
+.theme-switch input:checked + .theme-slider {
+    background: var(--accent-gradient);
+}
+
+.theme-switch input:checked + .theme-slider::before {
+    transform: translateX(22px);
+}
+
+/* Comportamiento al colapsar el menú en PC */
+.collapsed .theme-switch-wrapper .theme-text {
+    display: none;
+}
+
+.collapsed .theme-switch-wrapper {
+    justify-content: center;
+    padding: 20px 0;
+}
