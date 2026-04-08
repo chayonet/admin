@@ -1,6 +1,5 @@
 /* =================================================================================
    ARCHIVO: movimientos.js
-   MÓDULO DE MOVIMIENTOS FINANCIEROS - DIGITAL WORLD 
    Lógica: Listado, Agrupación, Borrado Masivo, Ordenamiento y Exportación a CSV.
 ================================================================================= */
 
