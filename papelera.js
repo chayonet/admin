@@ -1,6 +1,5 @@
 /* =================================================================================
    ARCHIVO: papelera.js
-   MÓDULO GLOBAL DE PAPELERA (SOFT DELETE) - DIGITAL WORLD
    Lógica: Recuperación, Eliminación Definitiva y Selección Múltiple.
 ================================================================================= */
 
