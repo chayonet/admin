@@ -1,6 +1,5 @@
 /* =================================================================================
    ARCHIVO: movimientos_modal.js
-   MÓDULO: AUDITORÍA DE MOVIMIENTOS (ADMIN) - DIGITAL WORLD 
    Lógica: Modal Popup con Historial Premium, Paginación y Facturas 100% DOM.
 ================================================================================= */
 
@@ -631,7 +630,7 @@ window.invocarFacturaHTML = async function(orderId) {
             const fmt = new Intl.NumberFormat('es-CO');
             
             // Aquí iremos construyendo el texto de "Copiar Todo"
-            let textoCopiarTodo = `🌟 DIGITAL WORLD - FACTURA DE COMPRA 🌟\nPEDIDO: ${orderId}\n`;
+            let textoCopiarTodo = `🌟 CHAYONET - FACTURA DE COMPRA 🌟\nPEDIDO: ${orderId}\n`;
             
             let agrupados = {};
             data.datos.forEach(item => {
