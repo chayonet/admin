@@ -63,7 +63,7 @@ function cargarChartJS() {
 
 async function cargarServiciosReales() {
     try {
-        const response = await fetch('${API_BASE_URL_F}/admin_api.php', {
+        const response = await fetch(`${API_BASE_URL_F}/admin_api.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -289,7 +289,7 @@ function bindEventosVolumen() {
 // ==========================================
 async function fetchVentasRealData(p1Start, p1End, p2Start, p2End, servicios) {
     try {
-        const response = await fetch('${API_BASE_URL_F}/admin_api.php', {
+        const response = await fetch(`${API_BASE_URL_F}/admin_api.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
