@@ -4,7 +4,7 @@
    Lógica: Listado de tickets cerrados, lectura de contexto y resolución.
 ================================================================================= */
 
-const API_TICKETS_RESUELTOS = '${API_BASE_URL_F}/admin_api.php';
+const API_TICKETS_RESUELTOS = `${API_BASE_URL_F}/admin_api.php`;
 let moduloTicketsResueltosInicializado = false;
 
 // 🔥 Memoria Global para guardar los tickets sin romper el HTML 🔥
