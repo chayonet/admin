@@ -1,6 +1,5 @@
 /* =================================================================================
    ARCHIVO: tickets_pendientes.js
-   MÓDULO DE SOPORTE - DIGITAL WORLD
    Lógica: Listado de tickets abiertos, lectura de contexto y envío de respuestas.
 ================================================================================= */
 
