@@ -1,6 +1,5 @@
 /* =================================================================================
    ARCHIVO: volumen_de_ventas.js
-   MÓDULO DE ANÁLISIS DE VOLUMEN - DIGITAL WORLD
    Lógica: Filtros, Insights IA Avanzados (Dinámicos), Gráficos y Tablas comparativas.
 ================================================================================= */
 
