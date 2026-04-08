@@ -1483,7 +1483,7 @@ function initEventosProductos() {
                 cuentasAgrupadas[srv].push(prod.cuenta);
             });
 
-            let contenido = "🌟 CHAYONET - INVENTARIO 🌟\r\n";
+            let contenido = `🌟 ${NOMBRE_NEGOCIO} - INVENTARIO 🌟\r\n`;
             contenido += "=======================================================\r\n\r\n";
             
             for (const srv in cuentasAgrupadas) {
