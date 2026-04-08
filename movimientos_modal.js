@@ -4,7 +4,7 @@
    Lógica: Modal Popup con Historial Premium, Paginación y Facturas 100% DOM.
 ================================================================================= */
 
-const API_ADMIN_MOVS = 'https://apis-yley.onrender.com/admin_api.php';
+const API_ADMIN_MOVS = '${API_BASE_URL_F}/admin_api.php';
 
 // Variables de Estado del Modal Principal
 let modalMovsRaw = [];              
