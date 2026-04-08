@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     sessionStorage.setItem('admin_permisos', res.permisos || "[]");
 
                     document.getElementById('admin-name-display').innerText = res.usuario;
-                    mostrarToast('Bienvenido a JEICOSTREAMING-ADMIN', 'success');
+                    mostrarToast('Bienvenido a CHAYONET-ADMIN', 'success');
                     
                     // Aplicar la aduana visual antes de mostrar el panel
                     aplicarPermisosVisuales();
