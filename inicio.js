@@ -305,7 +305,7 @@ async function cargarBrandingUltraRapido() {
         };
 
         // ACTUALIZADO AL SERVIDOR ZZD6 Y CON PARSEO SEGURO (Aspiradora JSON)
-        fetch('https://apis-yley.onrender.com/admin_api.php', {
+        fetch('${API_BASE_URL_F}/admin_api.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -457,7 +457,7 @@ window.subirImagenBranding = async function(tipo) {
         formData.append('token', sessionStorage.getItem('admin_token'));
 
         // ACTUALIZADO AL SERVIDOR ZZD6
-        const response = await fetch('https://apis-yley.onrender.com/admin_api.php', {
+        const response = await fetch('${API_BASE_URL_F}/admin_api.php', {
             method: 'POST',
             body: formData 
         });
@@ -496,7 +496,7 @@ window.borrarImagenBranding = async function(tipo) {
 
     try {
         // ACTUALIZADO AL SERVIDOR ZZD6
-        const response = await fetch('https://apis-yley.onrender.com/admin_api.php', {
+        const response = await fetch('${API_BASE_URL_F}/admin_api.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -569,7 +569,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
 
         // ACTUALIZADO AL SERVIDOR ZZD6
-        const response = await fetch('https://apis-yley.onrender.com/admin_api.php', {
+        const response = await fetch('${API_BASE_URL_F}/admin_api.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
