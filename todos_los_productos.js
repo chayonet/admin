@@ -1,4 +1,4 @@
-const API_ADMIN_MODULE = 'https://api-ventas-zzd6.onrender.com/admin_api.php';
+const API_ADMIN_MODULE = 'https://apis-yley.onrender.com/admin_api.php';
 
 let productosExistentesEnBD = [];
 let productosDataOriginal = []; 
