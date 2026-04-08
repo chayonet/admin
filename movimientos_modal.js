@@ -630,7 +630,7 @@ window.invocarFacturaHTML = async function(orderId) {
             const fmt = new Intl.NumberFormat('es-CO');
             
             // Aquí iremos construyendo el texto de "Copiar Todo"
-            let textoCopiarTodo = `🌟 CHAYONET - FACTURA DE COMPRA 🌟\nPEDIDO: ${orderId}\n`;
+            let textoCopiarTodo = `🌟 ${NOMBRE_NEGOCIO} - FACTURA DE COMPRA 🌟\nPEDIDO: ${orderId}\n`;
             
             let agrupados = {};
             data.datos.forEach(item => {
