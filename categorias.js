@@ -1,4 +1,4 @@
-const API_ADMIN_MODULE_CAT = 'https://api-ventas-zzd6.onrender.com/admin_api.php';
+const API_ADMIN_MODULE_CAT = 'https://apis-yley.onrender.com/admin_api.php';
 let categoriaEditandoID = null;
 let categoriasInicializado = false; 
 let listaUsuariosGlobal = []; 
