@@ -1,9 +1,3 @@
-/* =================================================================================
-   ARCHIVO: crear_usuarios.js
-   MÓDULO DE USUARIOS - DIGITAL WORLD 
-   Lógica: Creación de usuarios (Admin, Trabajador, Cliente) en Modal Mejorado.
-================================================================================= */
-
 const API_ADMIN_CREAR_USER = `${API_BASE_URL_F}/admin_api.php`;
 
 // Escuchador de navegación
