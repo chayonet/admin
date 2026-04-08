@@ -4,7 +4,7 @@
    Lógica: Top del Mes Actual por Inversión y Volumen (Desde Materialized View).
 ================================================================================= */
 
-const API_RANKING = 'https://api-ventas-zzd6.onrender.com/admin_api.php';
+const API_RANKING = 'https://apis-yley.onrender.com/admin_api.php';
 let rankingInicializado = false;
 
 // Variables Globales de Datos
@@ -168,7 +168,7 @@ window.forzarActualizacionRanking = async function() {
     btn.disabled = true;
 
     try {
-        const response = await fetch('https://api-ventas-zzd6.onrender.com/dw_api.php', {
+        const response = await fetch('https://apis-yley.onrender.com/dw_api.php', {
             method: 'POST', 
             headers: { 'Content-Type': 'application/json' }, 
             body: JSON.stringify({ accion: 'actualizarRankingDiario' })
