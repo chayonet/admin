@@ -188,7 +188,7 @@ function inicializarModuloInicio() {
                 <div style="z-index: 1;">
                     <h2 style="margin: 0; color: var(--text-main); font-size: 2rem; font-weight: 800; font-family: 'Righteous', cursive; letter-spacing: 1px;">Centro de Mando</h2>
                     <p style="color: var(--text-gray); margin-top: 8px; font-size: 1.05rem; max-width: 600px;">
-                        `Bienvenido a <strong>${NOMBRE_NEGOCIO}</strong>. Desde aquí podrás gestionar el catálogo, monitorear los ingresos y personalizar la experiencia visual de tus clientes.`
+                        Bienvenido a <strong>${NOMBRE_NEGOCIO}</strong>. Desde aquí podrás gestionar el catálogo, monitorear los ingresos y personalizar la experiencia visual de tus clientes.
                     </p>
                 </div>
             </div>
