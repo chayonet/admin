@@ -1,6 +1,5 @@
 /* =================================================================================
    ARCHIVO: ranking.js (PANEL ADMIN)
-   MÓDULO DE RANKING - DIGITAL WORLD 
    Lógica: Top del Mes Actual por Inversión y Volumen (Desde Materialized View).
 ================================================================================= */
 
