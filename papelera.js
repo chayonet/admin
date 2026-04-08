@@ -137,7 +137,7 @@ const PapeleraEngine = {
         const token = sessionStorage.getItem('admin_token');
 
         try {
-            const response = await fetch('${API_BASE_URL_F}/admin_api.php', {
+            const response = await fetch(`${API_BASE_URL_F}/admin_api.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ accion: 'getRegistrosPapelera', tabla: this.moduloActivo, usuario, token })
@@ -210,7 +210,7 @@ const PapeleraEngine = {
     async restaurar(id) {
         const usuario = sessionStorage.getItem('admin_user');
         const token = sessionStorage.getItem('admin_token');
-        const res = await fetch('${API_BASE_URL_F}/admin_api.php', {
+        const res = await fetch(`${API_BASE_URL_F}/admin_api.php`, {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ accion: 'restaurarRegistro', tabla: this.moduloActivo, id: id, usuario, token })
         }).then(r => r.json());
@@ -229,7 +229,7 @@ const PapeleraEngine = {
 
         const usuario = sessionStorage.getItem('admin_user');
         const token = sessionStorage.getItem('admin_token');
-        const res = await fetch('${API_BASE_URL_F}/admin_api.php', {
+        const res = await fetch(`${API_BASE_URL_F}/admin_api.php`, {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ accion: 'eliminarPermanente', tabla: this.moduloActivo, id: id, usuario, token })
         }).then(r => r.json());
@@ -286,7 +286,7 @@ const PapeleraEngine = {
 
         // Procesamiento en paralelo para máxima velocidad sin alterar el PHP
         const promesas = seleccionados.map(id => 
-            fetch('${API_BASE_URL_F}/admin_api.php', {
+            fetch(`${API_BASE_URL_F}/admin_api.php`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ accion: accionAPI, tabla: this.moduloActivo, id: id, usuario, token })
             }).then(r => r.json())
