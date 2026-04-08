@@ -1,4 +1,4 @@
-const API_RECARGAS = 'https://apis-yley.onrender.com/admin_api.php';
+const API_RECARGAS = '${API_BASE_URL_F}/admin_api.php';
 let usuariosParaRecarga = [];
 
 window.abrirModalRecargaUsuario = async function(usuarioPreseleccionado = null) {
