@@ -4,7 +4,7 @@
    Lógica: Listado de tickets abiertos, lectura de contexto y envío de respuestas.
 ================================================================================= */
 
-const API_TICKETS = 'https://apis-yley.onrender.com/admin_api.php';
+const API_TICKETS = '${API_BASE_URL_F}/admin_api.php';
 let moduloTicketsInicializado = false;
 
 // 🔥 Memoria Global para guardar los tickets sin romper el HTML 🔥
