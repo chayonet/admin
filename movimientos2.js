@@ -1,6 +1,5 @@
 /* =================================================================================
    ARCHIVO: movimientos2.js
-   EXTENSIÓN DE MOVIMIENTOS FINANCIEROS - DIGITAL WORLD 
    Lógica: Resumen Financiero Dinámico (Recargas vs Gastos y Descuentos)
 ================================================================================= */
 
