@@ -4,7 +4,7 @@
    Lógica: Listado, Agrupación, Borrado Masivo, Ordenamiento y Exportación a CSV.
 ================================================================================= */
 
-const API_MOVIMIENTOS = '${API_BASE_URL_F}/admin_api.php';
+const API_MOVIMIENTOS = `${API_BASE_URL_F}/admin_api.php`;
 
 // Variables Globales del Motor
 let movimientosDataOriginal = []; 
