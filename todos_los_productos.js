@@ -73,7 +73,7 @@ function inicializarModuloProductos() {
                 <table id="tabla-productos" style="margin-top: 0; width: 100%; border-collapse: collapse;">
                     <thead>
                         <tr style="background: var(--bg-dark);">
-                            <th id="th-chk-prod" style="width: 40px; text-align: center; padding: 15px; border-bottom: 1px solid var(--border-color);"><input type="checkbox" id="chk-all-prod" onchange="toggleAllChkProd('chk-all-prod', 'chk-item-prod', 'btn-bulk-prod')" style="accent-color: var(--accent);"></th>
+                            <th id="th-chk-prod" style="width: 40px; text-align: center; padding: 15px; border-bottom: 1px solid var(--border-color);"><input type="checkbox" id="chk-all-prod" onchange="toggleAllChkProd('chk-all-prod', 'chk-item-prod', 'bulk-actions-prod')" style="accent-color: var(--accent);"></th>
                             <th style="padding: 15px; color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem; border-bottom: 1px solid var(--border-color); text-align:left;">ID</th>
                             <th style="padding: 15px; color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem; border-bottom: 1px solid var(--border-color); text-align:left;">Servicio</th>
                             <th style="padding: 15px; color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem; border-bottom: 1px solid var(--border-color); text-align:left;">Dato de Acceso</th>
@@ -88,11 +88,21 @@ function inicializarModuloProductos() {
                 </table>
             </div>
             
-            <div style="margin-top: 15px; height: 40px;">
-                <button id="btn-bulk-prod" style="display: none; background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.3); width: auto; padding: 8px 16px; border-radius: 8px; transition: all 0.3s ease; font-weight: bold; cursor:pointer;">
-                    <i class="material-icons-round" style="font-size: 1.2rem; vertical-align: middle;">delete_sweep</i> <span>Borrar Selección</span>
-                </button>
-            </div>
+            <div id="bulk-actions-prod" style="display: none; margin-top: 15px; align-items: center; gap: 10px; flex-wrap: wrap;">
+    <span id="bulk-count-label" style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600;"></span>
+    <button id="btn-bulk-archivar" style="background: rgba(148,163,184,0.1); color: #94a3b8; border: 1px solid rgba(148,163,184,0.3); width: auto; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+        <i class="material-icons-round" style="font-size: 1.1rem;">inventory_2</i> Archivar
+    </button>
+    <button id="btn-bulk-reciclar" style="background: rgba(56,189,248,0.1); color: #38bdf8; border: 1px solid rgba(56,189,248,0.3); width: auto; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+        <i class="material-icons-round" style="font-size: 1.1rem;">lock_open</i> Reciclar a Stock
+    </button>
+    <button id="btn-bulk-renovar" style="background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.3); width: auto; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+        <i class="material-icons-round" style="font-size: 1.1rem;">autorenew</i> Renovar Clientes
+    </button>
+    <button id="btn-bulk-borrar" style="background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(239,68,68,0.3); width: auto; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+        <i class="material-icons-round" style="font-size: 1.1rem;">delete_sweep</i> Papelera
+    </button>
+</div>
 
             <div id="paginacion-productos-container" style="display: flex; gap: 5px; margin-top: 20px; align-items: center; justify-content: center;"></div>
         `;
@@ -516,7 +526,7 @@ function prepararModalesEspeciales() {
                 accesoVisual = `📌 PIN: ${datos.cuenta_nueva}`;
             }
 
-            const textoCool = `Hola 👋\nAquí tienes el reemplazo por garantía de tu servicio.\n\n📺 Servicio: ${datos.servicio}\n${accesoVisual}\n\n📅 Fecha de entrega: ${datos.fecha_hoy}\n⏳ Vencimiento: ${datos.fecha_fin}\n\n¡Gracias por preferirnos! ✨`;
+            const textoCool = `Hola 👋\nEn respuesta a tu cuenta caída ${datos.cuenta_vieja}, aquí tienes tu reemplazo:\n\n📺 Servicio: ${datos.servicio}\n${accesoVisual}\n\n📅 Fecha de entrega: ${datos.fecha_hoy}\n⏳ Vencimiento: ${datos.fecha_fin}\n\n¡Gracias por preferirnos! ✨`;
             
             document.getElementById('garantia-ticket-texto').innerText = textoCool;
             
@@ -1036,7 +1046,7 @@ function ejecutarFiltrosYRender() {
         let accionesHTML = '';
         const objEdit = encodeURIComponent(JSON.stringify(prod));
 
-        cbTd = `<td style="text-align: center;"><input type="checkbox" class="chk-item-prod" value="${prod.id}" data-estado="${prod.vendida}" onchange="checkIndividualProd('chk-item-prod', 'btn-bulk-prod', 'chk-all-prod')"></td>`;
+        cbTd = `<td style="text-align: center;"><input type="checkbox" class="chk-item-prod" value="${prod.id}" data-estado="${prod.vendida}" onchange="checkIndividualProd('chk-item-prod', 'bulk-actions-prod', 'chk-all-prod')"></td>`;
 
         if (prod.vendida === 'Vencida' || prod.vendida === 'Reemplazada') {
             estadoHTML = `<span style="background: rgba(255,255,255,0.05); color: var(--text-gray); border: 1px dashed var(--border-color); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; display: inline-block;">Archivada</span>`;
@@ -1050,7 +1060,19 @@ function ejecutarFiltrosYRender() {
             } else {
                 estadoHTML = `<span style="background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; display: inline-block;">Vendida</span>`;
             }
-            accionesHTML = `<button onclick="abrirModalGarantia('${objEdit}', ${diasRest})" style="background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 6px 12px; box-shadow: none; border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 6px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 5px; margin: 0 auto;" title="Aplicar Garantía por caída"><i class="material-icons-round" style="font-size: 1rem;">health_and_safety</i> Garantía</button>`;
+            accionesHTML = `
+    <div style="display:flex; justify-content:center; gap:5px;">
+        <button onclick="abrirModalGarantia('${objEdit}', ${diasRest})" 
+            style="background: rgba(16,185,129,0.1); color: #10b981; padding: 6px 12px; box-shadow: none; border: 1px solid rgba(16,185,129,0.3); border-radius: 6px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 5px;"
+            title="Aplicar Garantía">
+            <i class="material-icons-round" style="font-size: 1rem;">health_and_safety</i> Garantía
+        </button>
+        <button onclick="abrirModalReversarVenta('${objEdit}')"
+            style="background: rgba(239,68,68,0.1); color: #ef4444; padding: 6px 10px; box-shadow: none; border: 1px solid rgba(239,68,68,0.3); border-radius: 6px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 5px;"
+            title="Reversar venta y reembolsar">
+            <i class="material-icons-round" style="font-size: 1rem;">undo</i>
+        </button>
+    </div>`;
         } else {
             estadoHTML = `<span style="background: var(--bg-dark); color: var(--text-main); border: 1px solid var(--border-color); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; display: inline-block;">Disponible</span>`;
             accionesHTML = `
@@ -1202,9 +1224,10 @@ function initEventosProductos() {
         ejecutarFiltrosYRender(); 
     });
 
-    document.getElementById('btn-bulk-prod')?.addEventListener('click', () => {
-        borrarMasivoProd('inventario', 'chk-item-prod');
-    });
+    document.getElementById('btn-bulk-borrar')?.addEventListener('click', () => borrarMasivoProd('inventario', 'chk-item-prod'));
+document.getElementById('btn-bulk-archivar')?.addEventListener('click', () => gestionMasivaProd('archivar'));
+document.getElementById('btn-bulk-reciclar')?.addEventListener('click', () => abrirModalBulkGestion('reciclar'));
+document.getElementById('btn-bulk-renovar')?.addEventListener('click', () => abrirModalBulkGestion('renovar'));
 
     document.getElementById('buscar-producto')?.addEventListener('keyup', (e) => { 
         if (e.key === 'Enter') {
@@ -1527,35 +1550,32 @@ function generarCSVProd(datos, nombreArchivo) {
     document.body.appendChild(link); link.click(); document.body.removeChild(link);
 }
 
-window.toggleAllChkProd = function(allId, itemClass, btnId) {
+window.toggleAllChkProd = function(allId, itemClass, containerId) {
     const checked = document.getElementById(allId).checked;
     document.querySelectorAll('.' + itemClass).forEach(chk => {
-        if(!chk.disabled) chk.checked = checked;
+        if (!chk.disabled) chk.checked = checked;
     });
-    const btn = document.getElementById(btnId);
-    if(btn) {
-        if (checked && document.querySelectorAll('.' + itemClass + ':checked:not(:disabled)').length > 0) {
-            btn.style.display = 'inline-block';
-        } else {
-            btn.style.display = 'none';
-        }
+    const total = document.querySelectorAll('.' + itemClass + ':checked:not(:disabled)').length;
+    const container = document.getElementById(containerId);
+    if (container) {
+        container.style.display = total > 0 ? 'flex' : 'none';
+        const label = document.getElementById('bulk-count-label');
+        if (label) label.innerText = `${total} seleccionados:`;
     }
-}
+};
 
-window.checkIndividualProd = function(itemClass, btnId, allId) {
-    const checkBoxesEnabled = document.querySelectorAll('.' + itemClass + ':not(:disabled)');
-    const total = checkBoxesEnabled.length;
+window.checkIndividualProd = function(itemClass, containerId, allId) {
+    const total = document.querySelectorAll('.' + itemClass + ':not(:disabled)').length;
     const checked = document.querySelectorAll('.' + itemClass + ':checked:not(:disabled)').length;
-    
     const allChk = document.getElementById(allId);
-    if(allChk) allChk.checked = (total === checked && total > 0);
-    
-    const btn = document.getElementById(btnId);
-    if(btn) {
-        if(checked > 0) btn.style.display = 'inline-block';
-        else btn.style.display = 'none';
+    if (allChk) allChk.checked = (total === checked && total > 0);
+    const container = document.getElementById(containerId);
+    if (container) {
+        container.style.display = checked > 0 ? 'flex' : 'none';
+        const label = document.getElementById('bulk-count-label');
+        if (label) label.innerText = `${checked} seleccionados:`;
     }
-}
+};
 
 window.borrarMasivoProd = async function(tabla, itemClass) {
     const checkboxes = Array.from(document.querySelectorAll('.' + itemClass + ':checked:not(:disabled)'));
@@ -1658,7 +1678,185 @@ window.ordenarTablaProductos = function(columna) {
     prodPaginaActual = 1;
     ejecutarFiltrosYRender();
 };
+function obtenerIdsSeleccionados() {
+    return Array.from(document.querySelectorAll('.chk-item-prod:checked')).map(chk => ({
+        id: chk.value,
+        estado: chk.getAttribute('data-estado')
+    }));
+}
+window.abrirModalReversarVenta = function(objEncoded) {
+    const prod = JSON.parse(decodeURIComponent(objEncoded));
+    const precio = parseFloat(prod.precio_compra) || 0;
+    const isDark = document.body.classList.contains('dark-mode');
+    Swal.fire({
+        html: `
+            <div style="text-align:center; padding: 10px;">
+                <i class="material-icons-round" style="font-size: 3rem; color: #ef4444; margin-bottom:10px;">undo</i>
+                <h2 style="color:var(--text-main); font-size:1.3rem; margin:0 0 10px 0;">Reversar Venta</h2>
+                <p style="color:var(--text-gray); font-size:0.9rem; margin-bottom:15px;">
+                    Se reembolsará <b style="color:#10b981;">$${new Intl.NumberFormat('es-CO').format(precio)}</b> 
+                    a <b style="color:#38bdf8;">${prod.usuario_comprador}</b> y la cuenta volverá al inventario.
+                </p>
+                <div style="background:var(--bg-dark); border:1px solid var(--border-color); border-radius:10px; padding:12px; font-family:monospace; font-size:0.8rem; color:var(--text-muted); text-align:left;">
+                    📦 ${prod.servicio_nombre}<br>
+                    🔑 ${prod.cuenta}<br>
+                    🏷️ Orden: ${prod.order_id || 'Sin orden'}
+                </div>
+            </div>
+        `,
+        background: isDark ? 'var(--bg-card)' : '#ffffff',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: 'transparent',
+        confirmButtonText: '<i class="material-icons-round" style="vertical-align:middle; font-size:1rem;">undo</i> Confirmar Reembolso',
+        cancelButtonText: 'Cancelar',
+        customClass: { popup: 'premium-modal-radius', cancelButton: 'banco-btn-cancel' },
+        showLoaderOnConfirm: true,
+        preConfirm: async () => {
+            const res = await peticionProductosAPI({
+                accion: 'reversarVenta',
+                id_cuenta: prod.id
+            });
+            if (!res.success) {
+                Swal.showValidationMessage(`❌ ${res.msg}`);
+                return false;
+            }
+            return res;
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+        if (result.isConfirmed && result.value) {
+            mostrarToast(result.value.msg, 'success');
+            cargarProductosBase();
+        }
+    });
+};
+async function gestionMasivaProd(accion, cuentasConDatos = []) {
+    // Si no vienen datos por cuenta (caso archivar), construimos la lista básica
+    if (cuentasConDatos.length === 0) {
+        const seleccionados = obtenerIdsSeleccionados();
+        if (seleccionados.length === 0) return mostrarToast("No hay cuentas seleccionadas.", "warning");
+        const protegidas = seleccionados.filter(i => {
+            if (i.estado !== 'Si' && i.estado !== 'Garantia') return false;
+            const prod = productosDataOriginal.find(p => p.id == i.id);
+            return prod && calcularDiasReales(prod) > 0;
+        });
+        const idsProtegidas = new Set(protegidas.map(i => i.id));
+        const validas = seleccionados.filter(i => !idsProtegidas.has(i.id));
+        if (protegidas.length > 0) {
+            mostrarToast(`⚠️ ${protegidas.length} cuenta(s) activa(s) omitidas.`, 'info');
+        }
+        if (validas.length === 0) return mostrarToast("No hay cuentas válidas para esta acción.", "warning");
+        cuentasConDatos = validas.map(item => {
+            const prod = productosDataOriginal.find(p => p.id == item.id);
+            return { id: item.id, credenciales: prod ? prod.cuenta : 'archived_acc', dias: 30, precio: 0 };
+        });
+    }
+    const nombresAccion = { archivar: 'archivar', reciclar: 'liberar al stock', renovar: 'renovar' };
+    if (!confirm(`¿Confirmas ${nombresAccion[accion]} ${cuentasConDatos.length} cuenta(s)?`)) return;
+    let exitosos = 0, fallidos = 0;
+    for (const item of cuentasConDatos) {
+        const res = await peticionProductosAPI({
+            accion: 'gestionarCuentaCaducada',
+            tipo_gestion: accion,
+            id_viejo: item.id,
+            nuevas_credenciales: item.credenciales || 'archived_acc',
+            nuevos_dias: item.dias || 30,
+            precio_renovacion: item.precio || 0
+        });
+        if (res.success) exitosos++; else fallidos++;
+    }
+    mostrarToast(`✅ ${exitosos} procesadas` + (fallidos > 0 ? ` | ❌ ${fallidos} fallaron` : ''), exitosos > 0 ? 'success' : 'error');
+    const bulkEl = document.getElementById('bulk-actions-prod');
+    if (bulkEl) bulkEl.style.display = 'none';
+    const chkAll = document.getElementById('chk-all-prod');
+    if (chkAll) chkAll.checked = false;
+    cargarProductosBase();
+}
 
+window.abrirModalBulkGestion = function(accion) {
+    const seleccionados = obtenerIdsSeleccionados();
+    if (seleccionados.length === 0) return mostrarToast("No hay cuentas seleccionadas.", "warning");
+    const protegidas = seleccionados.filter(i => {
+        if (i.estado !== 'Si' && i.estado !== 'Garantia') return false;
+        const prod = productosDataOriginal.find(p => p.id == i.id);
+        return prod && calcularDiasReales(prod) > 0;
+    });
+    const idsProtegidas = new Set(protegidas.map(i => i.id));
+    const validas = seleccionados.filter(i => !idsProtegidas.has(i.id));
+    if (protegidas.length > 0) mostrarToast(`⚠️ ${protegidas.length} cuenta(s) activa(s) serán omitidas.`, 'info');
+    if (validas.length === 0) return mostrarToast("No hay cuentas válidas.", "warning");
+    const cuentasSeleccionadas = validas.map(item => productosDataOriginal.find(p => p.id == item.id) || { id: item.id, cuenta: '', servicio_nombre: '?', usuario_comprador: '-', precio_compra: 0 });
+    const modalViejo = document.getElementById('modal-bulk-gestion');
+    if (modalViejo) modalViejo.remove();
+    const modal = document.createElement('div');
+    modal.id = 'modal-bulk-gestion';
+    modal.className = 'modal-overlay';
+    Object.assign(modal.style, { display: 'none', position: 'fixed', top: '0', left: '0', width: '100%', height: '100%', background: 'rgba(10,15,25,0.9)', zIndex: '9996', alignItems: 'center', justifyContent: 'center' });
+    const esReciclar = accion === 'reciclar';
+    const esRenovar  = accion === 'renovar';
+    const count = cuentasSeleccionadas.length;
+    const titulo = esReciclar ? `<i class="material-icons-round">lock_open</i> Reciclar ${count} Cuentas` : `<i class="material-icons-round">autorenew</i> Renovar ${count} Cuentas`;
+    const info = esReciclar ? `Edita las credenciales antes de liberar al stock. Las originales quedan como <b>Vencidas</b>.` : `Edita las credenciales y el precio a cobrar a cada cliente.`;
+    const thPrecio = esRenovar ? `<th style="padding: 10px 8px; color: #94a3b8; font-size: 0.72rem; text-align:center;">$ Cobrar</th>` : '';
+    const filasTabla = cuentasSeleccionadas.map(prod => {
+        const tdPrecio = esRenovar ? `<td style="padding: 8px;"><input type="number" class="bulk-precio-input" data-id="${prod.id}" value="${prod.precio_compra || 0}" style="width:75px; padding:7px; background:#0f172a; border:1px solid #334155; color:#38bdf8; font-weight:bold; border-radius:6px; outline:none; text-align:center;"></td>` : '';
+        return `<tr style="border-bottom: 1px solid #1e293b;">
+            <td style="padding: 8px 10px; font-size: 0.78rem; color: #94a3b8; white-space:nowrap;">${prod.servicio_nombre}</td>
+            <td style="padding: 8px;"><input type="text" class="bulk-cred-input" data-id="${prod.id}" value="${prod.cuenta}" style="width:100%; padding:7px 10px; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:6px; outline:none; font-family:monospace; font-size:0.8rem; box-sizing:border-box;"></td>
+            <td style="padding: 8px; text-align:center;"><input type="number" class="bulk-dias-input" data-id="${prod.id}" value="30" style="width:65px; padding:7px; background:#0f172a; border:1px solid #334155; color:#10b981; font-weight:bold; border-radius:6px; outline:none; text-align:center;"></td>
+            ${tdPrecio}
+            <td style="padding: 8px 10px; font-size: 0.78rem; color: #38bdf8; white-space:nowrap;">${prod.usuario_comprador || '-'}</td>
+        </tr>`;
+    }).join('');
+    modal.innerHTML = `
+        <div style="background:#1e293b; border:1px solid #334155; border-radius:20px; max-width:720px; width:95%; max-height:85vh; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 25px 50px rgba(0,0,0,0.5);">
+            <div style="padding:20px 25px; background:#0f172a; border-bottom:1px solid #334155; display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
+                <h3 style="margin:0; color:#38bdf8; display:flex; align-items:center; gap:10px; font-size:1.1rem;">${titulo}</h3>
+                <button onclick="cerrarModal('modal-bulk-gestion')" style="background:transparent; border:none; color:#94a3b8; cursor:pointer; font-size:1.5rem;"><i class="material-icons-round">close</i></button>
+            </div>
+            <div style="padding:12px 25px; background:#0f172a; border-bottom:1px solid #1e293b; flex-shrink:0;">
+                <div style="font-size:0.83rem; color:#cbd5e1; background:#1e293b; padding:10px 15px; border-radius:8px; border:1px solid #334155;">${info}</div>
+            </div>
+            <div style="overflow-y:auto; flex:1;">
+                <table style="width:100%; border-collapse:collapse;">
+                    <thead style="background:#0f172a; position:sticky; top:0; z-index:1;">
+                        <tr>
+                            <th style="padding:10px; color:#94a3b8; font-size:0.72rem; text-align:left;">Servicio</th>
+                            <th style="padding:10px; color:#94a3b8; font-size:0.72rem; text-align:left;">Nuevas Credenciales</th>
+                            <th style="padding:10px 8px; color:#94a3b8; font-size:0.72rem; text-align:center;">Días</th>
+                            ${thPrecio}
+                            <th style="padding:10px; color:#94a3b8; font-size:0.72rem; text-align:left;">Cliente</th>
+                        </tr>
+                    </thead>
+                    <tbody style="background:#1e293b;">${filasTabla}</tbody>
+                </table>
+            </div>
+            <div style="padding:18px 25px; background:#0f172a; border-top:1px solid #334155; display:flex; gap:10px; flex-shrink:0;">
+                <button onclick="cerrarModal('modal-bulk-gestion')" style="flex:1; padding:12px; background:transparent; color:#94a3b8; border:1px solid #334155; border-radius:8px; font-weight:600; cursor:pointer;">Cancelar</button>
+                <button id="btn-bulk-confirmar" style="flex:2; padding:12px; background:${esReciclar ? '#38bdf8' : '#10b981'}; color:${esReciclar ? '#0f172a' : '#fff'}; border:none; border-radius:8px; font-weight:700; cursor:pointer; display:flex; justify-content:center; align-items:center; gap:8px;">
+                    <i class="material-icons-round">${esReciclar ? 'lock_open' : 'autorenew'}</i> Confirmar ${esReciclar ? 'Reciclaje' : 'Renovación'}
+                </button>
+            </div>
+        </div>`;
+    document.body.appendChild(modal);
+    document.getElementById('btn-bulk-confirmar').addEventListener('click', async () => {
+        const btn = document.getElementById('btn-bulk-confirmar');
+        btn.innerHTML = '<i class="material-icons-round" style="animation:spin 1s linear infinite;">autorenew</i> Procesando...';
+        btn.disabled = true;
+        const cuentasConDatos = Array.from(document.querySelectorAll('.bulk-cred-input')).map(input => {
+            const id = input.getAttribute('data-id');
+            const diasEl   = document.querySelector(`.bulk-dias-input[data-id="${id}"]`);
+            const precioEl = document.querySelector(`.bulk-precio-input[data-id="${id}"]`);
+            return { id, credenciales: input.value.trim() || 'archived_acc', dias: diasEl ? parseInt(diasEl.value) || 30 : 30, precio: precioEl ? parseFloat(precioEl.value) || 0 : 0 };
+        });
+        cerrarModal('modal-bulk-gestion');
+        await gestionMasivaProd(accion, cuentasConDatos);
+    });
+    abrirModal('modal-bulk-gestion');
+};
+
+// Wrapper (ESTO SIEMPRE AL FINAL)
 const oldCargarProductosBase = cargarProductosBase;
 cargarProductosBase = async function() {
     await oldCargarProductosBase();
