@@ -128,10 +128,20 @@
                 </span>
             </div>
             
-            <p style="margin: 0; display: flex; align-items: center; gap: 10px;">
-                <span class="header-saludo">Hola, <span id="admin-name-display">Admin</span></span>
-                <button id="btn-logout">SALIR</button>
-            </p>
+            <div style="margin: 0; display: flex; align-items: center; gap: 15px; margin-left: auto;">
+                
+                <div id="version-badge" class="version-badge" onclick="abrirModalUpdates()">
+                    <span id="badge-v-num" class="v-num">V.?.?.?</span>
+                    <span id="badge-v-date" class="v-date">Cargando...</span>
+                </div>
+                
+                <span class="header-saludo" style="border-left: 1px solid var(--border-color); padding-left: 15px; display: flex; align-items: center; height: 100%;">
+                    Hola, <span id="admin-name-display" style="margin-left: 5px; font-weight: bold;">Admin</span>
+                </span>
+                
+                <button id="btn-logout" style="margin-left: 5px;">SALIR</button>
+                
+            </div>
         </header>
 
         <main id="main-content">
@@ -161,6 +171,7 @@
         <div class="modal-content ticket-box" id="modal-general-content"></div>
     </div>
 
+    <script src="update.js"></script>
     <script src="config.js"></script>
     <script src="admin_ui.js"></script>
     <script src="adaptacion_cel.js"></script>
