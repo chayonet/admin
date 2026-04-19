@@ -752,3 +752,140 @@ body.dark-mode .modal-content {
     justify-content: center;
     padding: 20px 0;
 }
+
+/* =========================================================
+   11. BADGE DE VERSIONES Y MODAL DE ACTUALIZACIONES
+   ========================================================= */
+
+/* --- BADGE DEL HEADER --- */
+.version-badge {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 6px 16px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+    box-shadow: var(--shadow-sm);
+}
+.version-badge:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--accent-glow);
+}
+.v-num {
+    color: var(--text-main);
+    font-family: 'Righteous', cursive;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    line-height: 1.1;
+}
+.v-date {
+    color: var(--text-gray);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+/* --- OVERLAY DEL MODAL --- */
+#update-overlay {
+    position: fixed; 
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(5px); 
+    z-index: 10000;
+    transition: opacity 0.3s ease;
+}
+#update-overlay.hidden {
+    opacity: 0; 
+    pointer-events: none;
+}
+
+/* --- CONTENEDOR DEL MODAL --- */
+.update-modal {
+    position: fixed; 
+    top: 50%; left: 50%;
+    transform: translate(-50%, -45%) scale(0.95);
+    width: 90%; max-width: 600px; max-height: 85vh;
+    background: var(--bg-card);
+    border-radius: 16px; 
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-float);
+    display: flex; flex-direction: column;
+    opacity: 0; pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 11000;
+}
+/* Efecto Neón en Modo Oscuro */
+body.dark-mode .update-modal {
+    border: 1px solid rgba(139, 92, 246, 0.5);
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.15), 0 0 20px rgba(139, 92, 246, 0.1);
+}
+
+.update-modal.active {
+    opacity: 1; pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* --- HEADER DEL MODAL --- */
+.update-header {
+    padding: 20px 25px; 
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid var(--border-color); 
+    background: var(--bg-dark);
+    border-radius: 16px 16px 0 0;
+}
+.update-header-title { display: flex; align-items: center; gap: 12px; }
+.update-header-title span { 
+    font-size: 1.8rem; 
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.update-header-title h2 { 
+    margin: 0; font-size: 1.2rem; font-weight: 800; color: var(--text-main); 
+}
+.btn-close-update {
+    background: transparent; border: none; cursor: pointer; padding: 0;
+    color: var(--text-muted); transition: 0.2s; font-size: 1.5rem; 
+    filter: none; box-shadow: none;
+}
+.btn-close-update:hover { 
+    color: var(--danger); transform: rotate(90deg); 
+}
+
+/* --- CUERPO DEL MODAL (TIMELINE) --- */
+.update-body { padding: 25px; overflow-y: auto; }
+.update-body::-webkit-scrollbar { width: 6px; }
+.update-body::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+
+.timeline-item { position: relative; padding-left: 25px; margin-bottom: 25px; border-left: 2px solid var(--border-light); }
+.timeline-item:last-child { margin-bottom: 0; border-left-color: transparent; }
+.timeline-dot { position: absolute; left: -6px; top: 0; width: 10px; height: 10px; border-radius: 50%; }
+
+.timeline-content {
+    background: var(--bg-dark); border: 1px solid var(--border-light);
+    padding: 18px; border-radius: 12px; top: -10px; position: relative;
+}
+.timeline-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+.timeline-header h3 { margin: 0; font-size: 1.05rem; display: flex; align-items: center; gap: 8px; color: var(--text-main); font-weight: 800;}
+
+.version-badge-tag { font-size: 0.65rem; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; font-weight: 800; }
+.timeline-date { color: var(--text-gray); font-size: 0.75rem; font-weight: 700; }
+
+.timeline-list { list-style: none; padding: 0; margin: 0; }
+.timeline-list li { color: var(--text-gray); font-size: 0.9rem; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 8px; font-weight: 500; line-height: 1.4;}
+.timeline-list li:last-child { margin-bottom: 0; }
+.timeline-list li .material-icons-round { font-size: 1.2rem; color: var(--accent); margin-top: -1px;}
+
+/* --- RESPONSIVE MÓVIL --- */
+@media(max-width: 768px) {
+    .version-badge { padding: 4px 10px; border-radius: 8px; }
+    .v-num { font-size: 0.9rem; }
+    .v-date { font-size: 0.55rem; }
+}
