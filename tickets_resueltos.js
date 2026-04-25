@@ -1,6 +1,6 @@
 /* =================================================================================
    ARCHIVO: tickets_resueltos.js
-   Lógica: Listado de tickets cerrados, lectura de contexto y resolución.
+   Lógica: Listado de tickets cerrados, lectura de contexto, resolución y visualización de adjuntos.
 ================================================================================= */
 
 const API_TICKETS_RESUELTOS = `${API_BASE_URL_F}/admin_api.php`;
@@ -148,6 +148,17 @@ function inicializarModuloTicketsResueltos() {
 }
 
 // ==========================================
+// 🔥 FUNCIÓN AUXILIAR: Convertir a Thumbnail
+// ==========================================
+function convertirAThumbnailTicketResuelto(url) {
+    if (!url || url.trim() === "") return "";
+    if (url.includes("uc?export=view&id=")) {
+        return url.replace("uc?export=view&id=", "thumbnail?id=") + "&sz=w600";
+    }
+    return url;
+}
+
+// ==========================================
 // 3. CARGAR DATOS DESDE EL SERVIDOR
 // ==========================================
 async function cargarTicketsResueltos() {
@@ -250,6 +261,32 @@ function renderizarTarjetasResueltos(tickets, contenedor) {
 }
 
 // ==========================================
+// 4.5 VISOR EXPANDIDO DE IMAGEN
+// ==========================================
+window.abrirImagenResueltaExpandida = function(urlCodificada) {
+    const urlLimpia = decodeURIComponent(urlCodificada);
+    
+    // Transformamos a alta resolución para evitar descargas
+    let urlAltaResolucion = urlLimpia;
+    if (urlLimpia.includes("uc?export=view&id=")) {
+        urlAltaResolucion = urlLimpia.replace("uc?export=view&id=", "thumbnail?id=") + "&sz=w2500";
+    }
+
+    const isDark = document.body.classList.contains('dark-mode');
+    
+    Swal.fire({
+        imageUrl: urlAltaResolucion,
+        imageAlt: 'Evidencia de soporte',
+        showConfirmButton: false,
+        showCloseButton: true,
+        width: 'auto',
+        padding: '10px',
+        background: isDark ? '#1e293b' : '#ffffff',
+        customClass: { popup: 'swal-border-radius' }
+    });
+};
+
+// ==========================================
 // 5. LÓGICA PARA VER RESOLUCIÓN (SWEETALERT2 PREMIUM)
 // ==========================================
 window.abrirModalVerRespuesta = function(idTicket) {
@@ -266,6 +303,10 @@ window.abrirModalVerRespuesta = function(idTicket) {
     const tipoProblema = ticketSeleccionado.tipo_solicitud || 'Soporte General';
     const contextoOriginal = ticketSeleccionado.contexto || 'Sin descripción detallada.';
     const textoRespuesta = ticketSeleccionado.respuesta || 'Sin respuesta registrada.';
+    const imgUrlOriginal = ticketSeleccionado.imagen_adjunta || '';
+    
+    // Generar miniatura si hay imagen
+    const imgUrlMiniatura = convertirAThumbnailTicketResuelto(imgUrlOriginal);
     
     // Restablecer saltos de línea para el HTML
     const contextoRender = contextoOriginal.replace(/\n/g, '<br>');
@@ -280,45 +321,64 @@ window.abrirModalVerRespuesta = function(idTicket) {
     const panelBgSolution = esModoOscuro ? 'rgba(16, 185, 129, 0.1)' : 'rgba(16, 185, 129, 0.05)';
     const borderClaro = esModoOscuro ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
 
+    let modalHtml = `
+        <div style="text-align: left; font-size: 0.95rem; font-family: 'Inter', sans-serif;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid ${borderClaro}; padding-bottom: 15px; margin-bottom: 20px;">
+                <div>
+                    <strong style="color: ${textMuted}; font-size: 0.8rem; text-transform: uppercase;">Usuario:</strong><br>
+                    <span style="color: ${textColor}; font-weight: 700;">${nombreUsuario}</span>
+                </div>
+                <div style="text-align: right;">
+                    <strong style="color: ${textMuted}; font-size: 0.8rem; text-transform: uppercase;">Asunto:</strong><br>
+                    <span style="background: ${borderClaro}; color: ${textColor}; padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; font-weight: 600;">${tipoProblema}</span>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <strong style="color: var(--danger); display: flex; align-items: center; gap: 6px; margin-bottom: 8px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                    <i class="material-icons-round" style="font-size: 1.2rem;">report_problem</i> Reporte Inicial
+                </strong>
+                <div style="background: ${panelBgProblem}; border-left: 4px solid var(--danger); padding: 15px; border-radius: 6px 12px 12px 6px; color: ${textColor}; font-size: 0.9rem; max-height: 150px; overflow-y: auto; line-height: 1.5;">
+                    ${contextoRender}
+                </div>
+            </div>
+
+            <div>
+                <strong style="color: var(--success); display: flex; align-items: center; gap: 6px; margin-bottom: 8px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                    <i class="material-icons-round" style="font-size: 1.2rem;">verified_user</i> Resolución Aplicada
+                </strong>
+                <div style="background: ${panelBgSolution}; border-left: 4px solid var(--success); padding: 15px; border-radius: 6px 12px 12px 6px; color: ${textColor}; font-weight: 500; font-size: 0.95rem; max-height: 200px; overflow-y: auto; line-height: 1.6;">
+                    ${respuestaRender}
+                </div>
+            </div>
+    `;
+
+    // Si hay una imagen, creamos la miniatura cliqueable
+    if (imgUrlOriginal !== "") {
+        const urlSeguraParaClic = encodeURIComponent(imgUrlOriginal);
+        modalHtml += `
+            <div style="margin-top: 15px; text-align: center;">
+                <span style="font-size: 0.8rem; color: var(--success); font-weight: bold; margin-bottom: 8px; display: block; text-transform: uppercase; letter-spacing: 1px;">
+                    <i class="material-icons-round" style="font-size: 1.1rem; vertical-align: middle;">image</i> Evidencia Adjunta:
+                </span>
+                <img src="${imgUrlMiniatura}" 
+                     style="max-width: 100%; max-height: 150px; border-radius: 8px; cursor: zoom-in; border: 1px solid var(--border-color); transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: inline-block;" 
+                     onclick="abrirImagenResueltaExpandida(\`${urlSeguraParaClic}\`)" 
+                     onmouseover="this.style.transform='scale(1.03)'" 
+                     onmouseout="this.style.transform='scale(1)'">
+            </div>
+        `;
+    }
+
+    modalHtml += `</div>`;
+
     Swal.fire({
         title: `<div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
                     <i class="material-icons-round" style="color: var(--success); font-size: 2rem;">check_circle</i>
                     <span style="font-family: 'Righteous', cursive; color: ${textColor}; font-size: 1.5rem;">Caso #${idTicket} Cerrado</span>
                 </div>`,
-        html: `
-            <div style="text-align: left; font-size: 0.95rem; font-family: 'Inter', sans-serif;">
-                
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid ${borderClaro}; padding-bottom: 15px; margin-bottom: 20px;">
-                    <div>
-                        <strong style="color: ${textMuted}; font-size: 0.8rem; text-transform: uppercase;">Usuario:</strong><br>
-                        <span style="color: ${textColor}; font-weight: 700;">${nombreUsuario}</span>
-                    </div>
-                    <div style="text-align: right;">
-                        <strong style="color: ${textMuted}; font-size: 0.8rem; text-transform: uppercase;">Asunto:</strong><br>
-                        <span style="background: ${borderClaro}; color: ${textColor}; padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; font-weight: 600;">${tipoProblema}</span>
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 25px;">
-                    <strong style="color: var(--danger); display: flex; align-items: center; gap: 6px; margin-bottom: 8px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">
-                        <i class="material-icons-round" style="font-size: 1.2rem;">report_problem</i> Reporte Inicial
-                    </strong>
-                    <div style="background: ${panelBgProblem}; border-left: 4px solid var(--danger); padding: 15px; border-radius: 6px 12px 12px 6px; color: ${textColor}; font-size: 0.9rem; max-height: 150px; overflow-y: auto; line-height: 1.5;">
-                        ${contextoRender}
-                    </div>
-                </div>
-
-                <div>
-                    <strong style="color: var(--success); display: flex; align-items: center; gap: 6px; margin-bottom: 8px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">
-                        <i class="material-icons-round" style="font-size: 1.2rem;">verified_user</i> Resolución Aplicada
-                    </strong>
-                    <div style="background: ${panelBgSolution}; border-left: 4px solid var(--success); padding: 15px; border-radius: 6px 12px 12px 6px; color: ${textColor}; font-weight: 500; font-size: 0.95rem; max-height: 200px; overflow-y: auto; line-height: 1.6;">
-                        ${respuestaRender}
-                    </div>
-                </div>
-
-            </div>
-        `,
+        html: modalHtml,
         background: bgColor,
         color: textColor,
         showConfirmButton: true,
