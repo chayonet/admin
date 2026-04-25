@@ -3,6 +3,15 @@
 // 1. HISTORIAL DE VERSIONES
 const historicoVersiones = [
     {
+        version: "V.1.5.0",
+        fecha: "24/04/2026",
+        tipo: "Soporte Visual Premium",
+        cambios: [
+            "📸 <b>Evidencia Fotográfica:</b> Nuevo motor de soporte que te permite adjuntar capturas de pantalla y comprobantes al responder tickets de los clientes.",
+            "🚀 <b>Visor Nativo:</b> Tanto tú como el cliente podrán ver las imágenes en una miniatura ultrarrápida y ampliarlas a pantalla completa sin que se descarguen en el dispositivo."
+        ]
+    },
+    {
         version: "V.1.4.0",
         fecha: "18/04/2026",
         tipo: "Gestión Masiva Premium",
