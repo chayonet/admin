@@ -1,6 +1,6 @@
 /* =================================================================================
    ARCHIVO: tickets_pendientes.js
-   Lógica: Listado de tickets abiertos, lectura de contexto y envío de respuestas.
+   Lógica: Listado de tickets abiertos, lectura de contexto y envío de respuestas con imágenes (Drive).
 ================================================================================= */
 
 const API_TICKETS = `${API_BASE_URL_F}/admin_api.php`;
@@ -167,7 +167,10 @@ async function cargarTicketsPendientes() {
             body: JSON.stringify(payload)
         });
 
-        const res = await response.json();
+        const responseText = await response.text();
+        // 🔥 Limpieza PHP: Ignora warnings y agarra solo el JSON
+        const cleanPhpJson = responseText.substring(responseText.indexOf('{'), responseText.lastIndexOf('}') + 1);
+        const res = JSON.parse(cleanPhpJson);
 
         if (res.success) {
             // Guardamos los tickets en la memoria global del script
@@ -243,13 +246,82 @@ function renderizarTarjetasTickets(tickets, contenedor) {
 }
 
 // ==========================================
-// 5. LÓGICA DE RESPUESTA (SWEETALERT2 MEJORADO)
+// 5. MOTOR DE SUBIDA DE IMÁGENES A GOOGLE DRIVE
+// ==========================================
+async function subirImagenADrive(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        
+        reader.onload = function(event) {
+            const img = new Image();
+            img.src = event.target.result;
+            
+            img.onload = async function() {
+                // COMPRESIÓN CON CANVAS
+                const canvas = document.createElement('canvas');
+                const MAX_WIDTH = 800; // Ancho máximo
+                const MAX_HEIGHT = 800; // Alto máximo
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                } else {
+                    if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = "#ffffff"; // Fondo blanco por si hay transparencias
+                ctx.fillRect(0, 0, width, height);
+                ctx.drawImage(img, 0, 0, width, height);
+
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                const base64Data = dataUrl.split(',')[1]; 
+
+                const payload = {
+                    fileName: 'ticket_respuesta_' + new Date().getTime() + '.jpg', 
+                    mimeType: 'image/jpeg',
+                    base64: base64Data
+                };
+
+                try {
+                    const scriptUrl = "https://script.google.com/macros/s/AKfycbxpAgifTGMqVEyrvWDKP8AYnYrSnbdltnWQ5ENcKTP-jQDE1va4EM7Shu4OKMBH3kWL/exec";
+                    
+                    const response = await fetch(scriptUrl, {
+                        method: "POST",
+                        headers: { "Content-Type": "text/plain;charset=utf-8" },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    const resultText = await response.text();
+                    try {
+                        // 🔥 Limpieza: Extrae solo lo que está entre llaves { }
+                        const cleanJson = resultText.substring(resultText.indexOf('{'), resultText.lastIndexOf('}') + 1);
+                        const result = JSON.parse(cleanJson);
+                        if(result.success) resolve(result.url); 
+                        else reject(result.error);
+                    } catch(e) {
+                        console.error("Texto raro de Google:", resultText);
+                        reject("Error leyendo la respuesta de Google Drive.");
+                    }
+                } catch(err) {
+                    console.error("Error en Fetch Drive:", err);
+                    reject("Error de conexión al subir imagen a Drive.");
+                }
+            }
+        };
+    });
+}
+
+// ==========================================
+// 6. LÓGICA DE RESPUESTA (SWEETALERT2 MEJORADO CON DRAG&DROP)
 // ==========================================
 window.abrirModalRespuesta = function(idTicket) {
-    // 1. Buscamos el ticket completo en la memoria usando el ID
+    // 1. Buscamos el ticket completo
     const ticketSeleccionado = ticketsEnMemoria.find(t => t.id == idTicket);
-
-    // 2. Si por algún motivo no lo encuentra, evitamos errores
     if (!ticketSeleccionado) {
         Swal.fire('Error', 'No se encontraron los datos de este ticket. Sincroniza la bandeja.', 'error');
         return;
@@ -258,7 +330,7 @@ window.abrirModalRespuesta = function(idTicket) {
     const nombreUsuario = ticketSeleccionado.usuario;
     const tipoProblema = ticketSeleccionado.tipo_solicitud || 'Soporte General';
 
-    // Determinar si estamos en modo oscuro
+    // Colores dinámicos
     const esModoOscuro = document.body.classList.contains('dark-mode');
     const bgColor = esModoOscuro ? '#1e293b' : '#ffffff';
     const textColor = esModoOscuro ? '#f8fafc' : '#0f172a';
@@ -266,7 +338,6 @@ window.abrirModalRespuesta = function(idTicket) {
     const inputBg = esModoOscuro ? '#0f172a' : '#f8fafc';
     const inputBorder = esModoOscuro ? '#334155' : '#e2e8f0';
 
-    // Usamos SweetAlert2 para un modal de respuesta limpio y profesional
     Swal.fire({
         title: `<div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
                     <i class="material-icons-round" style="color: var(--accent); font-size: 2rem;">support_agent</i>
@@ -287,9 +358,18 @@ window.abrirModalRespuesta = function(idTicket) {
             <div style="text-align: left;">
                 <strong style="color: ${textColor}; font-size: 0.9rem; display: block; margin-bottom: 8px;">Tu Respuesta:</strong>
                 <textarea id="swal-input-respuesta" placeholder="Escribe la solución detallada aquí..." 
-                    style="width: 100%; min-height: 140px; background: ${inputBg}; color: ${textColor}; border: 1px solid ${inputBorder}; border-radius: 12px; padding: 15px; font-family: 'Inter', sans-serif; font-size: 0.95rem; resize: vertical; outline: none; transition: border-color 0.3s box-shadow 0.3s;"
+                    style="width: 100%; min-height: 120px; background: ${inputBg}; color: ${textColor}; border: 1px solid ${inputBorder}; border-radius: 12px; padding: 15px; font-family: 'Inter', sans-serif; font-size: 0.95rem; resize: vertical; outline: none; transition: border-color 0.3s, box-shadow 0.3s;"
                     onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px var(--accent-light)';"
                     onblur="this.style.borderColor='${inputBorder}'; this.style.boxShadow='none';"></textarea>
+            </div>
+
+            <div id="drop-zone-ticket" style="border: 2px dashed ${inputBorder}; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; margin-top: 15px; background: ${inputBg}; transition: all 0.3s;">
+                <input type="file" id="ticket-file-input" accept="image/*" style="display: none;">
+                <div id="ticket-preview-container">
+                    <i class="material-icons-round" style="font-size: 2rem; color: ${textMuted};">add_photo_alternate</i>
+                    <p style="margin: 5px 0 0 0; font-size: 0.85rem; color: ${textMuted}; font-weight: 600;">Añadir Imagen (Opcional)</p>
+                    <p style="margin: 2px 0 0 0; font-size: 0.75rem; color: ${textMuted};">Haz clic, arrastra o presiona Ctrl+V</p>
+                </div>
             </div>
         `,
         background: bgColor,
@@ -306,17 +386,83 @@ window.abrirModalRespuesta = function(idTicket) {
             confirmButton: 'swal-btn-confirm',
             cancelButton: 'swal-btn-cancel'
         },
+        didOpen: () => {
+            // LÓGICA INTERACTIVA DE DRAG & DROP Y PASTE
+            let fileObj = null;
+            const dropZone = document.getElementById('drop-zone-ticket');
+            const fileInput = document.getElementById('ticket-file-input');
+            const previewContainer = document.getElementById('ticket-preview-container');
+
+            const procesarArchivoVisual = (file) => {
+                if (!file || !file.type.startsWith('image/')) {
+                    Swal.showValidationMessage('El archivo adjunto debe ser una imagen.');
+                    return;
+                }
+                fileObj = file;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewContainer.innerHTML = `
+                        <div style="position:relative; display:inline-block;">
+                            <img src="${e.target.result}" style="max-height: 120px; border-radius: 8px; border: 1px solid var(--border-color); box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                            <div id="remove-img-btn" style="position:absolute; top:-10px; right:-10px; background:var(--danger); color:white; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-weight:bold; box-shadow:0 2px 5px rgba(0,0,0,0.3); transition: 0.2s;">×</div>
+                        </div>
+                    `;
+                    document.getElementById('remove-img-btn').onclick = (ev) => {
+                        ev.stopPropagation(); // Evitar que abra el explorador de archivos
+                        fileObj = null;
+                        fileInput.value = '';
+                        previewContainer.innerHTML = `
+                            <i class="material-icons-round" style="font-size: 2rem; color: ${textMuted};">add_photo_alternate</i>
+                            <p style="margin: 5px 0 0 0; font-size: 0.85rem; color: ${textMuted}; font-weight: 600;">Añadir Imagen (Opcional)</p>
+                            <p style="margin: 2px 0 0 0; font-size: 0.75rem; color: ${textMuted};">Haz clic, arrastra o presiona Ctrl+V</p>
+                        `;
+                    };
+                };
+                reader.readAsDataURL(file);
+            };
+
+            // Eventos Click y Cambio
+            dropZone.onclick = () => fileInput.click();
+            fileInput.onchange = (e) => { if(e.target.files.length) procesarArchivoVisual(e.target.files[0]); };
+
+            // Eventos Drag & Drop
+            dropZone.ondragover = (e) => { e.preventDefault(); dropZone.style.borderColor = 'var(--accent)'; dropZone.style.background = 'rgba(139, 92, 246, 0.05)'; };
+            dropZone.ondragleave = (e) => { e.preventDefault(); dropZone.style.borderColor = inputBorder; dropZone.style.background = inputBg; };
+            dropZone.ondrop = (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = inputBorder;
+                dropZone.style.background = inputBg;
+                if (e.dataTransfer.files.length) procesarArchivoVisual(e.dataTransfer.files[0]);
+            };
+
+            // Evento Pegar (Ctrl+V)
+            const handlePaste = (e) => {
+                if (e.clipboardData && e.clipboardData.files.length) {
+                    procesarArchivoVisual(e.clipboardData.files[0]);
+                }
+            };
+            document.addEventListener('paste', handlePaste);
+            
+            // Guardar funciones en el modal para limpiarlas y accederlas luego
+            Swal.getPopup().obtenerArchivo = () => fileObj;
+            Swal.getPopup().limpiarPaste = () => document.removeEventListener('paste', handlePaste);
+        },
+        willClose: () => {
+            // Limpiar el escuchador de Ctrl+V para no acumular eventos en el DOM
+            if(Swal.getPopup().limpiarPaste) Swal.getPopup().limpiarPaste();
+        },
         preConfirm: () => {
             const respuesta = document.getElementById('swal-input-respuesta').value.trim();
             if (!respuesta) {
                 Swal.showValidationMessage('La respuesta no puede estar vacía');
                 return false;
             }
-            return respuesta;
+            // Devolvemos el texto y el archivo (si hay)
+            return { texto: respuesta, archivo: Swal.getPopup().obtenerArchivo() };
         }
     }).then((result) => {
         if (result.isConfirmed) {
-            procesarRespuestaTicket(idTicket, result.value);
+            procesarRespuestaTicket(idTicket, result.value.texto, result.value.archivo);
         }
     });
 
@@ -335,11 +481,11 @@ window.abrirModalRespuesta = function(idTicket) {
     }
 }
 
-async function procesarRespuestaTicket(idTicket, textoRespuesta) {
+async function procesarRespuestaTicket(idTicket, textoRespuesta, archivoAdjunto) {
     // Mostrar loader de guardando
     Swal.fire({ 
-        title: 'Enviando...', 
-        text: 'Cerrando el ticket en la base de datos',
+        title: archivoAdjunto ? 'Subiendo imagen...' : 'Enviando...', 
+        text: archivoAdjunto ? 'Optimizando y guardando en la nube' : 'Cerrando el ticket en la base de datos',
         didOpen: () => Swal.showLoading(), 
         allowOutsideClick: false,
         background: '#ffffff', color: '#0f172a',
@@ -347,12 +493,22 @@ async function procesarRespuestaTicket(idTicket, textoRespuesta) {
     });
 
     try {
+        let urlDriveObtenida = "";
+
+        // Si hay una imagen, primero hacemos la magia de subirla a Drive
+        if (archivoAdjunto) {
+            urlDriveObtenida = await subirImagenADrive(archivoAdjunto);
+            // Actualizamos el texto del loader para dar feedback al usuario
+            Swal.update({ title: 'Enviando...', text: 'Imagen subida. Cerrando el ticket' });
+        }
+
         const payload = {
             accion: 'responderTicket',
             usuario: sessionStorage.getItem('admin_user'),
             token: sessionStorage.getItem('admin_token'),
             id: idTicket,
-            respuesta: textoRespuesta
+            respuesta: textoRespuesta,
+            imagen_url: urlDriveObtenida // Si no hay foto, viaja vacío
         };
 
         const response = await fetch(API_TICKETS, {
@@ -385,6 +541,7 @@ async function procesarRespuestaTicket(idTicket, textoRespuesta) {
             });
         }
     } catch (error) {
+        console.error("Error al procesar el ticket:", error);
         Swal.fire({
             icon: 'error',
             title: 'Error de Red',
